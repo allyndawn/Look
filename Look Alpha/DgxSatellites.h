@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DgxSatellite.h"
 
 @interface DgxSatellites : NSObject
-
-@property (nonatomic, readonly) NSMutableArray* subsatellitePoints;
 
 - (void)updateSubsatellitePoints;
 

@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSString* nameOfSatellite;
 
 // Line 1
+@property (nonatomic) int satcatNumber;                                 // http://en.wikipedia.org/wiki/Satellite_Catalog_Number
+@property (nonatomic) NSString *cosparID;                               // http://en.wikipedia.org/wiki/International_Designator
 @property (nonatomic) int epochYear;
 @property (nonatomic) double epochJulianDateFraction;
 

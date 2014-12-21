@@ -26,31 +26,45 @@
         // 1 25544U 98067A   14332.12480567  .00017916  00000-0  30378-3 0  4720
         // 2 25544  51.6474   6.7919 0007352  75.3130 346.0866 15.51558891916767
         
-        self.nameOfSatellite = nameOfSatellite;
+        _nameOfSatellite = nameOfSatellite;
         
-        self.epochYear = [[lineOne substringWithRange:NSMakeRange(18, 2)] intValue];
-        if (self.epochYear >= 57) {
-            self.epochYear += 1900;
+        NSString *satcatNumberString = [lineOne substringWithRange:NSMakeRange(2, 5)];
+        _satcatNumber = [satcatNumberString intValue];
+        
+        NSString *launchYearString = [lineOne substringWithRange:NSMakeRange(9, 2)];
+        int launchYear = [launchYearString intValue];
+        if (57 > launchYear) {
+            launchYear += 2000;
         } else {
-            self.epochYear += 2000;
+            launchYear += 1900;
         }
         
-        self.epochJulianDateFraction = [[lineOne substringWithRange:NSMakeRange(20, 12)] doubleValue];
+        NSString *launchSequentialIdentifer = [lineOne substringWithRange:NSMakeRange(11, 4)];
+        _cosparID = [NSString stringWithFormat:@"%d-%@", launchYear, launchSequentialIdentifer];
         
-        self.inclination = [[lineTwo substringWithRange:NSMakeRange(8, 8)] doubleValue];
+        _epochYear = [[lineOne substringWithRange:NSMakeRange(18, 2)] intValue];
+        if (_epochYear >= 57) {
+            _epochYear += 1900;
+        } else {
+            _epochYear += 2000;
+        }
         
-        self.rightAscensionOfTheAscendingNode = [[lineTwo substringWithRange:NSMakeRange(17, 7)] doubleValue];
+        _epochJulianDateFraction = [[lineOne substringWithRange:NSMakeRange(20, 12)] doubleValue];
+        
+        _inclination = [[lineTwo substringWithRange:NSMakeRange(8, 8)] doubleValue];
+        
+        _rightAscensionOfTheAscendingNode = [[lineTwo substringWithRange:NSMakeRange(17, 7)] doubleValue];
 
         NSString *eccentricityString = [NSString stringWithFormat:@"0.%@", [lineTwo substringWithRange:NSMakeRange(26, 7)]];
-        self.eccentricity = [eccentricityString doubleValue];
+        _eccentricity = [eccentricityString doubleValue];
 
-        self.argumentOfPerigee = [[lineTwo substringWithRange:NSMakeRange(34, 8)] doubleValue];
+        _argumentOfPerigee = [[lineTwo substringWithRange:NSMakeRange(34, 8)] doubleValue];
 
-        self.meanAnomaly = [[lineTwo substringWithRange:NSMakeRange(43, 8)] doubleValue];
+        _meanAnomaly = [[lineTwo substringWithRange:NSMakeRange(43, 8)] doubleValue];
         
-        self.meanMotion = [[lineTwo substringWithRange:NSMakeRange(52, 11)] doubleValue];
+        _meanMotion = [[lineTwo substringWithRange:NSMakeRange(52, 11)] doubleValue];
         
-        self.revolutionNumber = [[lineTwo substringWithRange:NSMakeRange(63, 5)] intValue];
+        _revolutionNumber = [[lineTwo substringWithRange:NSMakeRange(63, 5)] intValue];
     };
     
     return self;

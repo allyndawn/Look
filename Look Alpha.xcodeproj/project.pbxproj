@@ -16,7 +16,6 @@
 		3190E1F91A21AECF008CB086 /* Look_AlphaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3190E1F81A21AECF008CB086 /* Look_AlphaTests.m */; };
 		3190E2031A21B002008CB086 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3190E2021A21B001008CB086 /* MapKit.framework */; };
 		3190E20A1A2245AF008CB086 /* DgxSatellite.m in Sources */ = {isa = PBXBuildFile; fileRef = 3190E2091A2245AF008CB086 /* DgxSatellite.m */; };
-		3190E20D1A22465D008CB086 /* DgxSatellites.m in Sources */ = {isa = PBXBuildFile; fileRef = 3190E20C1A22465D008CB086 /* DgxSatellites.m */; };
 		319426041A2A0C5100E21E54 /* DgxJulianMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 319426031A2A0C5100E21E54 /* DgxJulianMath.m */; };
 		31B8B9661A28B91E0015AAEF /* DgxTwoLineElementSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B8B9651A28B91E0015AAEF /* DgxTwoLineElementSet.m */; };
 /* End PBXBuildFile section */
@@ -48,8 +47,6 @@
 		3190E2071A223BA5008CB086 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		3190E2081A2245AF008CB086 /* DgxSatellite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DgxSatellite.h; sourceTree = "<group>"; };
 		3190E2091A2245AF008CB086 /* DgxSatellite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DgxSatellite.m; sourceTree = "<group>"; };
-		3190E20B1A22465D008CB086 /* DgxSatellites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DgxSatellites.h; sourceTree = "<group>"; };
-		3190E20C1A22465D008CB086 /* DgxSatellites.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DgxSatellites.m; sourceTree = "<group>"; };
 		319426021A2A0C5100E21E54 /* DgxJulianMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DgxJulianMath.h; sourceTree = "<group>"; };
 		319426031A2A0C5100E21E54 /* DgxJulianMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DgxJulianMath.m; sourceTree = "<group>"; };
 		31B8B9641A28B91E0015AAEF /* DgxTwoLineElementSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DgxTwoLineElementSet.h; sourceTree = "<group>"; };
@@ -99,16 +96,14 @@
 			children = (
 				3190E1E01A21AECF008CB086 /* AppDelegate.h */,
 				3190E1E11A21AECF008CB086 /* AppDelegate.m */,
-				3190E2071A223BA5008CB086 /* ViewController.h */,
-				3190E1E41A21AECF008CB086 /* ViewController.m */,
 				319426021A2A0C5100E21E54 /* DgxJulianMath.h */,
 				319426031A2A0C5100E21E54 /* DgxJulianMath.m */,
 				31B8B9641A28B91E0015AAEF /* DgxTwoLineElementSet.h */,
 				31B8B9651A28B91E0015AAEF /* DgxTwoLineElementSet.m */,
 				3190E2081A2245AF008CB086 /* DgxSatellite.h */,
 				3190E2091A2245AF008CB086 /* DgxSatellite.m */,
-				3190E20B1A22465D008CB086 /* DgxSatellites.h */,
-				3190E20C1A22465D008CB086 /* DgxSatellites.m */,
+				3190E2071A223BA5008CB086 /* ViewController.h */,
+				3190E1E41A21AECF008CB086 /* ViewController.m */,
 				3190E1E61A21AECF008CB086 /* Main.storyboard */,
 				3190E1E91A21AECF008CB086 /* Images.xcassets */,
 				3190E1EB1A21AECF008CB086 /* LaunchScreen.xib */,
@@ -247,7 +242,6 @@
 			files = (
 				319426041A2A0C5100E21E54 /* DgxJulianMath.m in Sources */,
 				31B8B9661A28B91E0015AAEF /* DgxTwoLineElementSet.m in Sources */,
-				3190E20D1A22465D008CB086 /* DgxSatellites.m in Sources */,
 				3190E1E51A21AECF008CB086 /* ViewController.m in Sources */,
 				3190E1E21A21AECF008CB086 /* AppDelegate.m in Sources */,
 				3190E1DF1A21AECF008CB086 /* main.m in Sources */,

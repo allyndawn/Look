@@ -13,9 +13,15 @@
 @interface DgxSatellite : NSObject
 
 @property (nonatomic) DgxTwoLineElementSet *twoLineElementSet;
+@property (nonatomic) NSString *name;
+@property (nonatomic) long satCatNumber;
+@property (nonatomic) NSString *cosparID;
+@property (nonatomic) CLLocationCoordinate2D subsatellitePoint;
 
 - (instancetype)initWithTwoLineElementSet:(DgxTwoLineElementSet *)twoLineElementSet;
 
-- (CLLocationCoordinate2D)getSubsatellitePointNow;
+- (void)updateSubsatellitePoint;
+
+
 
 @end
