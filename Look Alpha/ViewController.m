@@ -11,13 +11,16 @@
 #import <CoreLocation/CoreLocation.h>
 #import "DgxSatellite.h"
 
-@interface ViewController () <MKMapViewDelegate>
+#define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+
+@interface ViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic) UITextView *clockView;
 @property (nonatomic) MKMapView *mapView;
 @property (nonatomic) NSMutableArray *satellites;
 @property (nonatomic) NSArray *satelliteAnnotations;
 @property (nonatomic) NSTimer *timer;
+@property (nonatomic) CLLocationManager *locationManager;
 
 @property (atomic) NSMutableArray *pendingRequests;
 
@@ -28,6 +31,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addSubViews];
+    [self addUsersLocation];
     [self addSatellites];
     [self addTimer];
 }
@@ -140,18 +144,24 @@
     [self addSatellitesFromURL:@"http://www.celestrak.com/NORAD/elements/gps-ops.txt" withSourceTag:@"GPS Operational"];        
 }
 
+- (void)addUsersLocation
+{
+    self.mapView.showsUserLocation = YES;
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    if(IS_OS_8_OR_LATER) {
+        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    [self.locationManager startUpdatingLocation];
+}
+
 - (void)addMapAnnotations
 {
     // Don't bother if there are pending requests
     if (0 != self.pendingRequests.count) {
         return;
     }
-    
-    // Otherwise, first, add our present location
-    MKPointAnnotation *userAnnotation = [[MKPointAnnotation alloc] init];
-    userAnnotation.coordinate = CLLocationCoordinate2DMake( 47.6097, -122.3331 );
-    userAnnotation.title = @"Your Location";
-    [self.mapView addAnnotation:userAnnotation];
 
     // Next, add the satellites
     // TODO: Filter
@@ -214,6 +224,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    [mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
 }
 
 @end
