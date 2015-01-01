@@ -10,14 +10,17 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "DgxSatellite.h"
+#import "DgxEarthStation.h"
 
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
 @interface ViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 
+@property (nonatomic) NSMutableArray *satellites;
+@property (nonatomic) DgxEarthStation *earthStation;
+
 @property (nonatomic) UITextView *clockView;
 @property (nonatomic) MKMapView *mapView;
-@property (nonatomic) NSMutableArray *satellites;
 @property (nonatomic) NSArray *satelliteAnnotations;
 @property (nonatomic) NSTimer *timer;
 @property (nonatomic) CLLocationManager *locationManager;
@@ -30,10 +33,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self addEarthStation];
     [self addSubViews];
     [self addUsersLocation];
     [self addSatellites];
     [self addTimer];
+}
+
+- (void)addEarthStation
+{
+    self.earthStation = [[DgxEarthStation alloc] init];
 }
 
 - (void)addSubViews {
@@ -172,7 +182,7 @@
         MKPointAnnotation *satelliteAnnotation = [[MKPointAnnotation alloc] init];
         DgxSatellite *satellite = [self.satellites objectAtIndex:i];
         satelliteAnnotation.title = [satellite name];
-        satelliteAnnotation.subtitle = [NSString stringWithFormat:@"%@ / %ld", [satellite cosparID], [satellite satCatNumber]];
+        satelliteAnnotation.subtitle = nil; // [NSString stringWithFormat:@"%@ / %ld", [satellite cosparID], [satellite satCatNumber]];
         satelliteAnnotation.coordinate = CLLocationCoordinate2DMake(0., 0.);
         [satelliteAnnotations addObject:satelliteAnnotation];
     }
@@ -193,8 +203,17 @@
     // Otherwise, update away!
     for (long i=0; i<self.satelliteAnnotations.count; i++) {
         DgxSatellite *satellite = self.satellites[i];
-        [satellite updateSubsatellitePoint];
-        [self.satelliteAnnotations[i] setCoordinate:satellite.subsatellitePoint];
+        DgxGeoCoordinates satelliteCoordinates = [satellite getSatellitePositionNow];
+        CLLocationCoordinate2D subsatellitePoint = CLLocationCoordinate2DMake(satelliteCoordinates.latitude, satelliteCoordinates.longitude);
+        [self.satelliteAnnotations[i] setCoordinate:subsatellitePoint];
+        
+        // Calculate the look angles for our current location
+        DgxLookAngle lookAngle = [self.earthStation getLookAngleForSatelliteAt:satelliteCoordinates];
+        if (lookAngle.elevation >= 0.) {
+            [self.satelliteAnnotations[i] setSubtitle:[NSString stringWithFormat:@"El: %.1f° Az: %.1f°", lookAngle.elevation, lookAngle.azimuth]];
+        } else {
+            [self.satelliteAnnotations[i] setSubtitle:nil];
+        }
     }
 }
 
@@ -229,6 +248,8 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     [mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
+    [self.earthStation setCoordinate:userLocation.location.coordinate];    
+    [self.earthStation setAltitude:userLocation.location.altitude];
 }
 
 @end

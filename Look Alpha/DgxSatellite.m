@@ -29,20 +29,15 @@
             _twoLineElementSet = [[DgxTwoLineElementSet alloc] init];
             _name = @"";
         }
-        
-        _subsatellitePoint = CLLocationCoordinate2DMake(0., 0.);
-        
-        [self updateSubsatellitePoint];
     }
     
     return self;
 }
 
-- (void)updateSubsatellitePoint
+- (DgxGeoCoordinates)getSatellitePositionNow
 {    
-    CLLocationDegrees ssLat = 0;
-    CLLocationDegrees ssLong = 0;
-    
+    DgxGeoCoordinates currentSatellitePosition;
+        
     long currentDate = [DgxJulianMath getSecondsSinceReferenceDate];    
     double currentJulianDate = [DgxJulianMath getJulianDateFromSecondsSinceReferenceDate:currentDate];
     double semimajorAxis = self.twoLineElementSet.getSemimajorAxis; // kilometers
@@ -94,10 +89,11 @@
     double relativeY = sin(rotationFromGeocentricRad) * geocentricX + cos(rotationFromGeocentricRad) * geocentricY;
     double relativeZ = geocentricZ;
     
-    ssLat = 90. - acos(relativeZ / sqrt(relativeX * relativeX + relativeY * relativeY + relativeZ * relativeZ)) * 180. / M_PI;
-    ssLong = atan2(relativeY, relativeX) * 180. / M_PI;
-        
-    self.subsatellitePoint = CLLocationCoordinate2DMake( ssLat, ssLong );
+    currentSatellitePosition.latitude = 90. - acos(relativeZ / sqrt(relativeX * relativeX + relativeY * relativeY + relativeZ * relativeZ)) * 180. / M_PI;
+    currentSatellitePosition.longitude = atan2(relativeY, relativeX) * 180. / M_PI;
+    currentSatellitePosition.altitude = currentOrbitalRadius - 6370.;
+
+    return currentSatellitePosition;
 }
 
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 #import "DgxTwoLineElementSet.h"
+#import "DgxSpaceConstants.h"
 
 @interface DgxSatellite : NSObject
 
@@ -16,12 +17,9 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) long satCatNumber;
 @property (nonatomic) NSString *cosparID;
-@property (nonatomic) CLLocationCoordinate2D subsatellitePoint;
 
 - (instancetype)initWithTwoLineElementSet:(DgxTwoLineElementSet *)twoLineElementSet;
 
-- (void)updateSubsatellitePoint;
-
-
+- (DgxGeoCoordinates)getSatellitePositionNow;
 
 @end
