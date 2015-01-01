@@ -36,7 +36,7 @@
     
     double radiusRatio = (self.altitude + 6370.) / (satelliteCoordinates.altitude + 6370.);
     
-    double elevationRad = acos(sin(gamma)/sqrt(1 + radiusRatio*radiusRatio - 2*radiusRatio*cos(gamma)));
+    double elevationRad = atan((cos(gamma) - radiusRatio) / sqrt(1. - cos(gamma)*cos(gamma)));
     
     // calculate alpha, the azimuth angle (but we'll need to tweak it a bit before we can use it)
     
