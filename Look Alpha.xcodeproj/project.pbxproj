@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		31846A1E1A55916700D0FC44 /* DgxEarthStation.m in Sources */ = {isa = PBXBuildFile; fileRef = 31846A1D1A55916700D0FC44 /* DgxEarthStation.m */; };
+		31846A221A571FD400D0FC44 /* DgxSatelliteAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 31846A211A571FD400D0FC44 /* DgxSatelliteAnnotation.m */; };
 		3190E1DF1A21AECF008CB086 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3190E1DE1A21AECF008CB086 /* main.m */; };
 		3190E1E21A21AECF008CB086 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3190E1E11A21AECF008CB086 /* AppDelegate.m */; };
 		3190E1E51A21AECF008CB086 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3190E1E41A21AECF008CB086 /* ViewController.m */; };
@@ -35,6 +36,8 @@
 		31846A1C1A55916700D0FC44 /* DgxEarthStation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DgxEarthStation.h; sourceTree = "<group>"; };
 		31846A1D1A55916700D0FC44 /* DgxEarthStation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DgxEarthStation.m; sourceTree = "<group>"; };
 		31846A1F1A55A1BA00D0FC44 /* DgxSpaceConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DgxSpaceConstants.h; sourceTree = "<group>"; };
+		31846A201A571FD400D0FC44 /* DgxSatelliteAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DgxSatelliteAnnotation.h; sourceTree = "<group>"; };
+		31846A211A571FD400D0FC44 /* DgxSatelliteAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DgxSatelliteAnnotation.m; sourceTree = "<group>"; };
 		3190E1D91A21AECF008CB086 /* Look Alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Look Alpha.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3190E1DD1A21AECF008CB086 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3190E1DE1A21AECF008CB086 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -109,6 +112,8 @@
 				31B8B9651A28B91E0015AAEF /* DgxTwoLineElementSet.m */,
 				3190E2081A2245AF008CB086 /* DgxSatellite.h */,
 				3190E2091A2245AF008CB086 /* DgxSatellite.m */,
+				31846A201A571FD400D0FC44 /* DgxSatelliteAnnotation.h */,
+				31846A211A571FD400D0FC44 /* DgxSatelliteAnnotation.m */,
 				3190E2071A223BA5008CB086 /* ViewController.h */,
 				3190E1E41A21AECF008CB086 /* ViewController.m */,
 				3190E1E61A21AECF008CB086 /* Main.storyboard */,
@@ -247,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31846A221A571FD400D0FC44 /* DgxSatelliteAnnotation.m in Sources */,
 				319426041A2A0C5100E21E54 /* DgxJulianMath.m in Sources */,
 				31B8B9661A28B91E0015AAEF /* DgxTwoLineElementSet.m in Sources */,
 				3190E1E51A21AECF008CB086 /* ViewController.m in Sources */,

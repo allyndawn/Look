@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "DgxSatellite.h"
 #import "DgxEarthStation.h"
+#import "DgxSatelliteAnnotation.h"
 
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
@@ -179,10 +180,10 @@
     // Create it first as an NSMutableArray
     NSMutableArray *satelliteAnnotations = [[NSMutableArray alloc] init];
     for (long i=0; i<self.satellites.count; i++) {        
-        MKPointAnnotation *satelliteAnnotation = [[MKPointAnnotation alloc] init];
+        DgxSatelliteAnnotation *satelliteAnnotation = [[DgxSatelliteAnnotation alloc] init];
         DgxSatellite *satellite = [self.satellites objectAtIndex:i];
         satelliteAnnotation.title = [satellite name];
-        satelliteAnnotation.subtitle = nil; // [NSString stringWithFormat:@"%@ / %ld", [satellite cosparID], [satellite satCatNumber]];
+        satelliteAnnotation.subtitle = nil;
         satelliteAnnotation.coordinate = CLLocationCoordinate2DMake(0., 0.);
         [satelliteAnnotations addObject:satelliteAnnotation];
     }
@@ -190,7 +191,9 @@
     // But then, to get KVO for changes to the subsatellite points, we have to repackage it into NSArray
     // TODO: Is this for certain?
     self.satelliteAnnotations = [[NSArray alloc] initWithArray:satelliteAnnotations];
-    [self.mapView addAnnotations:self.satelliteAnnotations];
+    for (long i=0; i<self.satelliteAnnotations.count; i++) {
+        [self.mapView addAnnotation:self.satelliteAnnotations[i]];
+    }
 }
 
 - (void)updateMapAnnotations
@@ -208,11 +211,24 @@
         [self.satelliteAnnotations[i] setCoordinate:subsatellitePoint];
         
         // Calculate the look angles for our current location
+        DgxSatelliteVisibilityType oldVisibility = [self.satelliteAnnotations[i] visibility];
+        DgxSatelliteVisibilityType newVisibility = oldVisibility;
+        
         DgxLookAngle lookAngle = [self.earthStation getLookAngleForSatelliteAt:satelliteCoordinates];
         if (lookAngle.elevation >= 0.) {
             [self.satelliteAnnotations[i] setSubtitle:[NSString stringWithFormat:@"El: %.1f° Az: %.1f°", lookAngle.elevation, lookAngle.azimuth]];
+            newVisibility = KDGX_SATELLITE_VISIBILITY_GOOD;
         } else {
             [self.satelliteAnnotations[i] setSubtitle:nil];
+            newVisibility = KDGX_SATELLITE_NOT_VISIBLE;
+        }
+        
+        // If the visibility has changed, we need to remove and re-add the annotation
+        // otherwise iOS will not show the pin color change
+        if (newVisibility != oldVisibility) {
+            [self.mapView removeAnnotation:self.satelliteAnnotations[i]];
+            [self.satelliteAnnotations[i] setVisibility:newVisibility];
+            [self.mapView addAnnotation:self.satelliteAnnotations[i]];
         }
     }
 }
@@ -250,6 +266,44 @@
     [mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
     [self.earthStation setCoordinate:userLocation.location.coordinate];    
     [self.earthStation setAltitude:userLocation.location.altitude];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    // If the annotation is the user location, just return nil.
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+        return nil;
+    
+    if ([annotation isKindOfClass:[DgxSatelliteAnnotation class]]) {
+        
+        DgxSatelliteAnnotation *satelliteAnnotation = annotation;
+        
+        // Try to dequeue an existing pin view first.
+        MKPinAnnotationView *pinView = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
+        
+        if (!pinView) {
+            // If an existing pin view was not available, create one.
+            pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation
+                                                      reuseIdentifier:@"CustomPinAnnotationView"];
+            pinView.animatesDrop = NO;
+            pinView.canShowCallout = YES;
+            
+            // If appropriate, customize the callout by adding accessory views (code not shown).
+        } else {
+            pinView.annotation = annotation;
+        }
+
+        // Lastly, update the pin color
+        if (satelliteAnnotation.visibility == KDGX_SATELLITE_NOT_VISIBLE) {
+            pinView.pinColor = MKPinAnnotationColorRed;
+        } else {
+            pinView.pinColor = MKPinAnnotationColorGreen;
+        }
+
+        return pinView;
+    }
+    
+    return nil;
 }
 
 @end
