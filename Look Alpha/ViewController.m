@@ -20,8 +20,9 @@
 @property (nonatomic) NSMutableArray *satellites;
 @property (nonatomic) DgxEarthStation *earthStation;
 
-@property (nonatomic) UITextView *clockView;
-@property (nonatomic) MKMapView *mapView;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *dateTimeBarButtonItem;
+
+@property (nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic) NSArray *satelliteAnnotations;
 @property (nonatomic) NSTimer *timer;
 @property (nonatomic) CLLocationManager *locationManager;
@@ -35,8 +36,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.mapView.delegate = self;
+    
     [self addEarthStation];
-    [self addSubViews];
     [self addUsersLocation];
     [self addSatellites];
     [self addTimer];
@@ -45,39 +47,6 @@
 - (void)addEarthStation
 {
     self.earthStation = [[DgxEarthStation alloc] init];
-}
-
-- (void)addSubViews {
-    self.mapView = [[MKMapView alloc] initWithFrame:CGRectZero];
-    [self.mapView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    [self.view addSubview:self.mapView];
-    
-    self.clockView = [[UITextView alloc] initWithFrame:CGRectZero];
-    [self.clockView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    self.clockView.textAlignment = NSTextAlignmentCenter;
-    [self.clockView setFont:[UIFont systemFontOfSize:17]];
-    [self.clockView setBackgroundColor: [UIColor blackColor]];
-    [self.clockView setTextColor: [UIColor whiteColor]];
-    [self.view addSubview:self.clockView];
-
-    NSDictionary *views = @{@"mapview": self.mapView,
-                            @"clockview": self.clockView };    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[mapview]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:views]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[clockview]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:views]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mapview][clockview(40)]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:views]];
-    self.mapView.delegate = self;
 }
 
 - (void)addSatellitesFromURL:(NSString *)url withSourceTag:(NSString *)sourceTag
@@ -252,7 +221,7 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss 'UTC'"];
     [dateFormatter setTimeZone: [NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     NSString *timeeString = [dateFormatter stringFromDate:currentDate];    
-    self.clockView.text = timeeString;
+    self.dateTimeBarButtonItem.title = timeeString;
     [self updateMapAnnotations];
 }
 
@@ -279,28 +248,30 @@
         DgxSatelliteAnnotation *satelliteAnnotation = annotation;
         
         // Try to dequeue an existing pin view first.
-        MKPinAnnotationView *pinView = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
+        MKAnnotationView *pinAnnotationView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
         
-        if (!pinView) {
+        if (!pinAnnotationView) {
             // If an existing pin view was not available, create one.
-            pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation
+            pinAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
                                                       reuseIdentifier:@"CustomPinAnnotationView"];
-            pinView.animatesDrop = NO;
-            pinView.canShowCallout = YES;
+            //pinView.animatesDrop = NO;
+            pinAnnotationView.canShowCallout = YES;
             
             // If appropriate, customize the callout by adding accessory views (code not shown).
         } else {
-            pinView.annotation = annotation;
+            pinAnnotationView.annotation = annotation;
         }
 
         // Lastly, update the pin color
         if (satelliteAnnotation.visibility == KDGX_SATELLITE_NOT_VISIBLE) {
-            pinView.pinColor = MKPinAnnotationColorRed;
+            //pinView.pinColor = MKPinAnnotationColorRed;
+            pinAnnotationView.image = [UIImage imageNamed:@"Satellite not visible.png"];
         } else {
-            pinView.pinColor = MKPinAnnotationColorGreen;
+            //pinView.pinColor = MKPinAnnotationColorGreen;
+            pinAnnotationView.image = [UIImage imageNamed:@"Satellite visible.png"];
         }
 
-        return pinView;
+        return pinAnnotationView;
     }
     
     return nil;
