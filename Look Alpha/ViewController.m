@@ -248,28 +248,30 @@
         DgxSatelliteAnnotation *satelliteAnnotation = annotation;
         
         // Try to dequeue an existing pin view first.
-        MKPinAnnotationView *pinView = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
+        MKAnnotationView *pinAnnotationView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
         
-        if (!pinView) {
+        if (!pinAnnotationView) {
             // If an existing pin view was not available, create one.
-            pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation
+            pinAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
                                                       reuseIdentifier:@"CustomPinAnnotationView"];
-            pinView.animatesDrop = NO;
-            pinView.canShowCallout = YES;
+            //pinView.animatesDrop = NO;
+            pinAnnotationView.canShowCallout = YES;
             
             // If appropriate, customize the callout by adding accessory views (code not shown).
         } else {
-            pinView.annotation = annotation;
+            pinAnnotationView.annotation = annotation;
         }
 
         // Lastly, update the pin color
         if (satelliteAnnotation.visibility == KDGX_SATELLITE_NOT_VISIBLE) {
-            pinView.pinColor = MKPinAnnotationColorRed;
+            //pinView.pinColor = MKPinAnnotationColorRed;
+            pinAnnotationView.image = [UIImage imageNamed:@"Satellite not visible.png"];
         } else {
-            pinView.pinColor = MKPinAnnotationColorGreen;
+            //pinView.pinColor = MKPinAnnotationColorGreen;
+            pinAnnotationView.image = [UIImage imageNamed:@"Satellite visible.png"];
         }
 
-        return pinView;
+        return pinAnnotationView;
     }
     
     return nil;
